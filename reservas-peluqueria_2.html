@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserva tu cita — Peluquería Alma</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand:    #C8963E;
+  --brand-dk: #9A6F25;
+  --brand-lt: #FDF3E3;
+  --dark:     #1A1208;
+  --body-bg:  #FAF8F3;
+  --surface:  #FFFFFF;
+  --ink:      #1A1208;
+  --ink2:     #5A5040;
+  --radius:   14px;
+  --wa:       #25D366;
+  --wa-dk:    #128C4A;
+  --err:      #DC2626;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:"DM Sans",sans-serif;background:var(--body-bg);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+/* HEADER */
+.header{background:var(--dark);padding:2rem 1.5rem 1.8rem;text-align:center;position:relative;overflow:hidden;}
+.header::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 120% at 50% 110%,rgba(200,150,62,.2) 0%,transparent 60%);}
+.header-inner{position:relative;z-index:1;}
+.header-logo{font-family:"Playfair Display",serif;font-size:1.9rem;font-weight:700;color:#fff;}
+.header-logo em{font-style:italic;font-weight:400;color:var(--brand);}
+.header-sub{font-size:.72rem;color:rgba(255,255,255,.45);letter-spacing:2.5px;text-transform:uppercase;margin-top:5px;}
+.live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);border-radius:20px;padding:5px 14px;margin-top:12px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.live-txt{font-size:.72rem;font-weight:600;color:#22C55E;}
+
+/* MAIN */
+.main{max-width:540px;margin:0 auto;padding:1.8rem 1.2rem 5rem;}
+
+/* CARD */
+.card{background:var(--surface);border-radius:var(--radius);box-shadow:0 4px 24px rgba(26,18,8,.08);padding:1.6rem;margin-bottom:1.1rem;border:1px solid rgba(26,18,8,.06);animation:fadeUp .4s ease both;}
+.card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.1s}.card:nth-child(3){animation-delay:.15s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card-title{font-family:"Playfair Display",serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:1.1rem;display:flex;align-items:center;gap:10px;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;font-family:"DM Sans",sans-serif;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* SERVICIOS */
+.svc-list{display:flex;flex-direction:column;gap:7px;}
+.svc{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:10px;border:2px solid transparent;background:var(--body-bg);cursor:pointer;transition:all .18s;}
+.svc:hover{border-color:rgba(200,150,62,.3);background:#fff;}
+.svc.sel{border-color:var(--brand);background:var(--brand-lt);}
+.svc input{position:absolute;opacity:0;pointer-events:none;}
+.svc-ic{font-size:1.3rem;width:32px;text-align:center;flex-shrink:0;}
+.svc-body{flex:1;}
+.svc-name{font-size:.88rem;font-weight:600;color:var(--ink);}
+.svc-dur{font-size:.73rem;color:var(--ink2);margin-top:1px;}
+.svc-price{font-family:"Playfair Display",serif;font-size:1rem;font-weight:700;color:var(--brand);white-space:nowrap;}
+.svc-check{width:19px;height:19px;border-radius:50%;border:2px solid rgba(26,18,8,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.svc.sel .svc-check{background:var(--brand);border-color:var(--brand);}
+.svc.sel .svc-check::after{content:"✓";color:#fff;font-size:.65rem;font-weight:700;}
+
+/* CALENDARIO PERSONALIZADO */
+.cal-wrap{user-select:none;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.cal-nav-btn{width:34px;height:34px;border-radius:50%;border:2px solid rgba(26,18,8,.1);background:var(--body-bg);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .18s;color:var(--ink);}
+.cal-nav-btn:hover{border-color:var(--brand);background:var(--brand-lt);}
+.cal-month{font-family:"Playfair Display",serif;font-size:1rem;font-weight:700;color:var(--ink);text-transform:capitalize;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dow{text-align:center;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink2);padding:4px 0 6px;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:.85rem;font-weight:500;cursor:pointer;transition:all .18s;border:2px solid transparent;}
+.cal-day:hover:not(.past):not(.empty){border-color:var(--brand);background:var(--brand-lt);}
+.cal-day.empty{cursor:default;}
+.cal-day.past{color:rgba(26,18,8,.2);cursor:not-allowed;}
+.cal-day.today{font-weight:700;color:var(--brand);}
+.cal-day.sel{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:700;}
+.cal-day.domingo{color:#DC2626;}
+.cal-day.domingo.sel{background:var(--brand);color:#fff;}
+
+/* HORAS */
+.field-label{font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink2);margin-bottom:.6rem;margin-top:1.2rem;}
+.hours-wrap{margin-top:.3rem;}
+.hours-loading{text-align:center;padding:1.2rem;font-size:.82rem;color:var(--ink2);}
+.hours-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:.4rem;}
+@media(max-width:400px){.hours-grid{grid-template-columns:repeat(3,1fr);}}
+.hour-btn{padding:9px 4px;border-radius:8px;border:2px solid rgba(26,18,8,.1);background:var(--body-bg);font-family:"DM Sans",sans-serif;font-size:.82rem;font-weight:500;color:var(--ink);cursor:pointer;transition:all .18s;text-align:center;}
+.hour-btn:hover{border-color:var(--brand);background:var(--brand-lt);}
+.hour-btn.sel{border-color:var(--brand);background:var(--brand);color:#fff;font-weight:600;}
+.hour-btn.taken{border-color:transparent;background:rgba(26,18,8,.04);color:rgba(26,18,8,.2);cursor:not-allowed;text-decoration:line-through;}
+.hours-empty{font-size:.82rem;color:var(--ink2);text-align:center;padding:.8rem 0;}
+
+/* DATOS */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:.9rem;}
+.field:last-child{margin-bottom:0;}
+.field label{font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink2);}
+.field input{width:100%;padding:11px 13px;border-radius:8px;border:2px solid rgba(26,18,8,.1);background:var(--body-bg);font-family:"DM Sans",sans-serif;font-size:.9rem;color:var(--ink);outline:none;transition:border-color .18s;}
+.field input:focus{border-color:var(--brand);background:#fff;}
+.field.err input{border-color:var(--err);}
+.field .hint{font-size:.7rem;color:var(--err);display:none;}
+.field.err .hint{display:block;}
+
+/* RESUMEN */
+.summary{background:var(--dark);border-radius:var(--radius);padding:1.3rem 1.5rem;margin-bottom:1.1rem;display:none;}
+.summary.show{display:block;}
+.sum-label{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand);margin-bottom:9px;}
+.sum-rows{display:flex;flex-direction:column;gap:5px;}
+.sum-row{display:flex;justify-content:space-between;font-size:.83rem;}
+.sum-row .l{color:rgba(255,255,255,.5);}
+.sum-row .v{color:#fff;font-weight:500;}
+.sum-row .v.gold{color:var(--brand);font-family:"Playfair Display",serif;font-size:.95rem;}
+
+/* BTN WA */
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:var(--wa);color:#fff;border:none;border-radius:var(--radius);font-family:"DM Sans",sans-serif;font-size:.98rem;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(37,211,102,.3);transition:all .22s;}
+.btn-wa:hover{background:var(--wa-dk);transform:translateY(-2px);}
+.btn-wa:disabled{background:#94A3B8;box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-note{text-align:center;font-size:.73rem;color:var(--ink2);margin-top:.6rem;line-height:1.6;}
+
+/* FOOTER */
+.footer{text-align:center;padding:1.5rem;font-size:.7rem;color:rgba(26,18,8,.3);}
+.footer a{color:var(--brand);text-decoration:none;}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:#fff;font-size:.82rem;font-weight:500;padding:11px 20px;border-radius:30px;box-shadow:0 8px 32px rgba(0,0,0,.25);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-logo">Peluquería <em>Alma</em></div>
+    <div class="header-sub">Marbella · Costa del Sol</div>
+    <div class="live-badge"><span class="live-dot"></span><span class="live-txt">Disponibilidad en tiempo real</span></div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- PASO 1: SERVICIO -->
+  <div class="card">
+    <div class="card-title"><span class="step-num">1</span> ¿Qué necesitas?</div>
+    <div class="svc-list" id="svcList">
+      <label class="svc" onclick="selSvc(this)">
+        <input type="radio" name="svc" value="Corte de pelo" data-dur="45" data-price="25€">
+        <span class="svc-ic">✂️</span>
+        <span class="svc-body"><span class="svc-name">Corte de pelo</span><span class="svc-dur">45 min · Lavado + corte</span></span>
+        <span class="svc-price">25€</span><span class="svc-check"></span>
+      </label>
+      <label class="svc" onclick="selSvc(this)">
+        <input type="radio" name="svc" value="Tinte completo" data-dur="150" data-price="60€">
+        <span class="svc-ic">🎨</span>
+        <span class="svc-body"><span class="svc-name">Tinte completo</span><span class="svc-dur">2 h 30 min · Color + hidratación</span></span>
+        <span class="svc-price">60€</span><span class="svc-check"></span>
+      </label>
+      <label class="svc" onclick="selSvc(this)">
+        <input type="radio" name="svc" value="Mechas / Balayage" data-dur="180" data-price="desde 80€">
+        <span class="svc-ic">💫</span>
+        <span class="svc-body"><span class="svc-name">Mechas / Balayage</span><span class="svc-dur">3 h · Técnica personalizada</span></span>
+        <span class="svc-price">desde 80€</span><span class="svc-check"></span>
+      </label>
+      <label class="svc" onclick="selSvc(this)">
+        <input type="radio" name="svc" value="Tratamiento capilar" data-dur="60" data-price="35€">
+        <span class="svc-ic">💆</span>
+        <span class="svc-body"><span class="svc-name">Tratamiento capilar</span><span class="svc-dur">1 h · Keratina + hidratación</span></span>
+        <span class="svc-price">35€</span><span class="svc-check"></span>
+      </label>
+      <label class="svc" onclick="selSvc(this)">
+        <input type="radio" name="svc" value="Peinado especial" data-dur="90" data-price="45€">
+        <span class="svc-ic">💍</span>
+        <span class="svc-body"><span class="svc-name">Peinado especial</span><span class="svc-dur">1 h 30 min · Bodas y eventos</span></span>
+        <span class="svc-price">45€</span><span class="svc-check"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- PASO 2: FECHA + HORA -->
+  <div class="card">
+    <div class="card-title"><span class="step-num">2</span> ¿Qué día y hora?</div>
+    <div class="cal-wrap">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="cambiarMes(-1)">‹</button>
+        <span class="cal-month" id="calMonth"></span>
+        <button class="cal-nav-btn" onclick="cambiarMes(1)">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+    <div class="hours-wrap" id="hoursWrap" style="display:none;">
+      <div class="field-label">Hora disponible</div>
+      <div id="hoursGrid"></div>
+    </div>
+  </div>
+
+  <!-- PASO 3: DATOS -->
+  <div class="card">
+    <div class="card-title"><span class="step-num">3</span> Tus datos</div>
+    <div class="field" id="f-name">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" placeholder="¿Cómo te llamas?">
+      <span class="hint">Escribe tu nombre</span>
+    </div>
+    <div class="field">
+      <label for="telefono">Teléfono (opcional)</label>
+      <input type="tel" id="telefono" placeholder="612 345 678">
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="summary" id="summary">
+    <div class="sum-label">Tu reserva</div>
+    <div class="sum-rows">
+      <div class="sum-row"><span class="l">Servicio</span><span class="v" id="s-svc">—</span></div>
+      <div class="sum-row"><span class="l">Fecha</span><span class="v" id="s-date">—</span></div>
+      <div class="sum-row"><span class="l">Hora</span><span class="v" id="s-time">—</span></div>
+      <div class="sum-row"><span class="l">Precio</span><span class="v gold" id="s-price">—</span></div>
+    </div>
+  </div>
+
+  <!-- BOTÓN -->
+  <button class="btn-wa" id="btnWa" onclick="reservar()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.852L.057 23.386a.75.75 0 0 0 .92.92l5.533-1.471A11.938 11.938 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-4.964-1.364l-.356-.211-3.685.979.98-3.684-.212-.356A9.724 9.724 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+    Confirmar cita por WhatsApp
+  </button>
+  <p class="btn-note">Tu cita queda guardada automáticamente.<br>Recibirás confirmación por WhatsApp.</p>
+
+</div>
+
+<div class="footer">
+  Peluquería Alma · Marbella · Web por <a href="https://impulsolocal.es">ImpulsoLocal.es</a>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIGURACIÓN
+// ══════════════════════════════════════════
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzviJqkIY7O2dsMjoddLSvbiZUO0B7BQRTp_YIyW0ZNTAmvRD32xYREdskxgqPDEXg_/exec';
+var WA_NUMBER  = '34654098723';
+var NEGOCIO    = 'Peluquería Alma';
+var HORARIO    = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30',
+                  '16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30'];
+var DIA_CIERRE = [0]; // 0=domingo cerrado. Añade 6 para cerrar sábados también.
+
+// ══════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════
+var selService  = null;
+var selHour     = null;
+var selFecha    = null; // formato YYYY-MM-DD
+var calYear, calMonth;
+
+// ══════════════════════════════════════════
+// CALENDARIO
+// ══════════════════════════════════════════
+(function init() {
+  var hoy = new Date();
+  calYear  = hoy.getFullYear();
+  calMonth = hoy.getMonth();
+  renderCal();
+})();
+
+function cambiarMes(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCal();
+}
+
+function renderCal() {
+  var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('calMonth').textContent = meses[calMonth] + ' ' + calYear;
+
+  var hoy      = new Date(); hoy.setHours(0,0,0,0);
+  var primerDia = new Date(calYear, calMonth, 1).getDay(); // 0=dom
+  // Convertir a lunes=0
+  var offset = (primerDia === 0) ? 6 : primerDia - 1;
+  var diasMes  = new Date(calYear, calMonth + 1, 0).getDate();
+
+  var html = '';
+  // Cabeceras
+  ['Lu','Ma','Mi','Ju','Vi','Sá','Do'].forEach(function(d) {
+    html += '<div class="cal-dow">' + d + '</div>';
+  });
+
+  // Celdas vacías iniciales
+  for (var i = 0; i < offset; i++) {
+    html += '<div class="cal-day empty"></div>';
+  }
+
+  // Días
+  for (var d = 1; d <= diasMes; d++) {
+    var fecha = new Date(calYear, calMonth, d);
+    var dow   = fecha.getDay(); // 0=dom, 6=sab
+    var fechaStr = calYear + '-' + pad(calMonth+1) + '-' + pad(d);
+    var clases = ['cal-day'];
+
+    if (DIA_CIERRE.indexOf(dow) !== -1 || fecha < hoy) {
+      clases.push('past');
+      if (dow === 0) clases.push('domingo');
+      html += '<div class="' + clases.join(' ') + '">' + d + '</div>';
+    } else {
+      if (fecha.getTime() === hoy.getTime()) clases.push('today');
+      if (dow === 0) clases.push('domingo');
+      if (fechaStr === selFecha) clases.push('sel');
+      html += '<div class="' + clases.join(' ') + '" onclick="selDia(\'' + fechaStr + '\',this)">' + d + '</div>';
+    }
+  }
+
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+function selDia(fechaStr, el) {
+  selFecha = fechaStr;
+  selHour  = null;
+  // Quitar sel de todos
+  document.querySelectorAll('.cal-day').forEach(function(d){ d.classList.remove('sel'); });
+  el.classList.add('sel');
+  cargarHoras(fechaStr);
+  updateSummary();
+}
+
+// ══════════════════════════════════════════
+// HORAS
+// ══════════════════════════════════════════
+function cargarHoras(fecha) {
+  var wrap = document.getElementById('hoursWrap');
+  var grid = document.getElementById('hoursGrid');
+  wrap.style.display = 'block';
+  grid.innerHTML = '<div class="hours-loading">Comprobando disponibilidad…</div>';
+
+  fetch(SCRIPT_URL + '?action=getReservas&fecha=' + fecha)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      renderHoras(data.horas || []);
+    })
+    .catch(function(){
+      renderHoras([]);
+    });
+}
+
+function renderHoras(ocupadas) {
+  var grid = document.getElementById('hoursGrid');
+  var html = '<div class="hours-grid">';
+  HORARIO.forEach(function(h) {
+    var taken = ocupadas.indexOf(h) !== -1;
+    if (taken) {
+      html += '<button class="hour-btn taken" disabled>' + h + '</button>';
+    } else {
+      html += '<button class="hour-btn" onclick="selHora(this,\'' + h + '\')">' + h + '</button>';
+    }
+  });
+  html += '</div>';
+  grid.innerHTML = html;
+}
+
+function selHora(btn, hora) {
+  document.querySelectorAll('.hour-btn').forEach(function(b){ b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  selHour = hora;
+  updateSummary();
+}
+
+// ══════════════════════════════════════════
+// SERVICIOS
+// ══════════════════════════════════════════
+function selSvc(label) {
+  document.querySelectorAll('.svc').forEach(function(el){ el.classList.remove('sel'); });
+  label.classList.add('sel');
+  selService = label.querySelector('input');
+  updateSummary();
+}
+
+// ══════════════════════════════════════════
+// RESUMEN
+// ══════════════════════════════════════════
+function updateSummary() {
+  if (!selService || !selFecha || !selHour) {
+    document.getElementById('summary').classList.remove('show');
+    return;
+  }
+  var dias  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var parts = selFecha.split('-');
+  var d     = new Date(parts[0], parts[1]-1, parts[2]);
+  var fechaLeg = dias[d.getDay()] + ' ' + parts[2] + ' de ' + meses[d.getMonth()];
+
+  document.getElementById('s-svc').textContent   = selService.value;
+  document.getElementById('s-date').textContent  = fechaLeg;
+  document.getElementById('s-time').textContent  = selHour + ' h';
+  document.getElementById('s-price').textContent = selService.dataset.price;
+  document.getElementById('summary').classList.add('show');
+}
+
+// ══════════════════════════════════════════
+// RESERVAR
+// ══════════════════════════════════════════
+function reservar() {
+  var nombre = document.getElementById('nombre').value.trim();
+  var tel    = document.getElementById('telefono').value.trim();
+  var valid  = true;
+
+  document.getElementById('f-name').classList.remove('err');
+
+  if (!selService) { showToast('Elige un servicio'); valid = false; }
+  if (!selFecha)   { showToast('Selecciona un día'); valid = false; }
+  if (!selHour)    { showToast('Selecciona una hora'); valid = false; }
+  if (!nombre)     { document.getElementById('f-name').classList.add('err'); valid = false; }
+  if (!valid) return;
+
+  var btn = document.getElementById('btnWa');
+  btn.disabled = true;
+  btn.textContent = 'Guardando reserva…';
+
+  var params = new URLSearchParams({
+    action:   'addReserva',
+    fecha:    selFecha,
+    hora:     selHour,
+    servicio: selService.value,
+    nombre:   nombre,
+    telefono: tel
+  });
+
+  fetch(SCRIPT_URL, { method:'POST', body: params })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.ok) {
+        enviarWhatsApp(nombre, tel);
+      } else {
+        showToast('Esa hora ya está reservada. Elige otra.');
+        btn.disabled = false;
+        btn.textContent = 'Confirmar cita por WhatsApp';
+        cargarHoras(selFecha);
+      }
+    })
+    .catch(function(){
+      enviarWhatsApp(nombre, tel);
+    });
+}
+
+function enviarWhatsApp(nombre, tel) {
+  var dias  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var parts = selFecha.split('-');
+  var d     = new Date(parts[0], parts[1]-1, parts[2]);
+  var fleg  = dias[d.getDay()] + ' ' + parts[2] + ' de ' + meses[d.getMonth()] + ' de ' + parts[0];
+
+  var msg = '¡Hola! He reservado una cita en ' + NEGOCIO + ':\n\n';
+  msg += '💇 *Servicio:* ' + selService.value + ' (' + selService.dataset.price + ')\n';
+  msg += '📅 *Fecha:* ' + fleg + '\n';
+  msg += '🕐 *Hora:* ' + selHour + ' h\n';
+  msg += '👤 *Nombre:* ' + nombre;
+  if (tel) msg += '\n📱 *Teléfono:* ' + tel;
+  msg += '\n\n¡Gracias! 🙏';
+
+  window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+  document.getElementById('btnWa').textContent = '✓ ¡Cita confirmada!';
+  showToast('¡Reserva guardada! Abriendo WhatsApp…');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+function pad(n) { return n < 10 ? '0' + n : n; }
+</script>
+</body>
+</html>
