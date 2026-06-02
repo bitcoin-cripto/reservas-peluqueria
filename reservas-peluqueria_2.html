@@ -144,31 +144,31 @@ body{font-family:"DM Sans",sans-serif;background:var(--body-bg);color:var(--ink)
       <label class="svc" onclick="selSvc(this)">
         <input type="radio" name="svc" value="Corte de pelo" data-dur="45" data-price="25€">
         <span class="svc-ic">✂️</span>
-        <span class="svc-body"><span class="svc-name">Corte de pelo</span><span class="svc-dur">45 min · Lavado + corte</span></span>
+        <span class="svc-body"><span class="svc-name">Corte de pelo</span><span class="svc-dur"> · Lavado + corte</span></span>
         <span class="svc-price">25€</span><span class="svc-check"></span>
       </label>
       <label class="svc" onclick="selSvc(this)">
         <input type="radio" name="svc" value="Tinte completo" data-dur="150" data-price="60€">
         <span class="svc-ic">🎨</span>
-        <span class="svc-body"><span class="svc-name">Tinte completo</span><span class="svc-dur">2 h 30 min · Color + hidratación</span></span>
+        <span class="svc-body"><span class="svc-name">Tinte completo</span><span class="svc-dur"> · Color + hidratación</span></span>
         <span class="svc-price">60€</span><span class="svc-check"></span>
       </label>
       <label class="svc" onclick="selSvc(this)">
         <input type="radio" name="svc" value="Mechas / Balayage" data-dur="180" data-price="desde 80€">
         <span class="svc-ic">💫</span>
-        <span class="svc-body"><span class="svc-name">Mechas / Balayage</span><span class="svc-dur">3 h · Técnica personalizada</span></span>
+        <span class="svc-body"><span class="svc-name">Mechas / Balayage</span><span class="svc-dur"> · Técnica personalizada</span></span>
         <span class="svc-price">desde 80€</span><span class="svc-check"></span>
       </label>
       <label class="svc" onclick="selSvc(this)">
         <input type="radio" name="svc" value="Tratamiento capilar" data-dur="60" data-price="35€">
         <span class="svc-ic">💆</span>
-        <span class="svc-body"><span class="svc-name">Tratamiento capilar</span><span class="svc-dur">1 h · Keratina + hidratación</span></span>
+        <span class="svc-body"><span class="svc-name">Tratamiento capilar</span><span class="svc-dur"> · Keratina + hidratación</span></span>
         <span class="svc-price">35€</span><span class="svc-check"></span>
       </label>
       <label class="svc" onclick="selSvc(this)">
         <input type="radio" name="svc" value="Peinado especial" data-dur="90" data-price="45€">
         <span class="svc-ic">💍</span>
-        <span class="svc-body"><span class="svc-name">Peinado especial</span><span class="svc-dur">1 h 30 min · Bodas y eventos</span></span>
+        <span class="svc-body"><span class="svc-name">Peinado especial</span><span class="svc-dur"> · Bodas y eventos</span></span>
         <span class="svc-price">45€</span><span class="svc-check"></span>
       </label>
     </div>
@@ -456,6 +456,18 @@ function enviarWhatsApp(nombre, tel) {
   window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
   document.getElementById('btnWa').textContent = '✓ ¡Cita confirmada!';
   showToast('¡Reserva guardada! Abriendo WhatsApp…');
+
+  // Reset completo
+selService = null;
+selHour    = null;
+selFecha   = null;
+document.querySelectorAll('.svc').forEach(function(el){ el.classList.remove('sel'); });
+document.querySelectorAll('.cal-day').forEach(function(d){ d.classList.remove('sel'); });
+document.getElementById('nombre').value    = '';
+document.getElementById('telefono').value  = '';
+document.getElementById('summary').classList.remove('show');
+document.getElementById('hoursWrap').style.display = 'none';
+document.getElementById('hoursGrid').innerHTML = '';
 }
 
 function showToast(msg) {
